@@ -1,5 +1,49 @@
-.settings
+HELP.md
 target/
-build/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
 .idea
+*.iws
 *.iml
+*.ipr
+.settings/
+.class
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+
+## Node
+dist/
+*.log
+.DS_Store
+
+# Eclipse
+*.project
+*.classpath
+.prefs
+*.prefs
+.metadata/
+
+
+
+
