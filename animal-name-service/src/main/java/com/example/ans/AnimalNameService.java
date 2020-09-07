@@ -1,16 +1,7 @@
-package com.shekhargulati.ans;
+package com.example.ans;
 
-import io.jaegertracing.Configuration;
-import io.jaegertracing.internal.samplers.ConstSampler;
-import io.opentracing.Span;
-import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
-import io.opentracing.propagation.Format;
-import io.opentracing.propagation.TextMapExtractAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,21 +24,6 @@ public class AnimalNameService {
         SpringApplication.run(AnimalNameService.class, args);
     }
 
-    @Bean
-    public Tracer tracer() {
-        Configuration.SamplerConfiguration samplerConfig = Configuration.SamplerConfiguration.fromEnv()
-                .withType(ConstSampler.TYPE)
-                .withParam(1);
-
-        Configuration.ReporterConfiguration reporterConfig = Configuration.ReporterConfiguration.fromEnv()
-                .withLogSpans(true);
-
-        Configuration config = new Configuration("animal-svc")
-                .withSampler(samplerConfig)
-                .withReporter(reporterConfig);
-
-        return config.getTracer();
-    }
 }
 
 @RestController
@@ -56,13 +32,11 @@ class AnimalNameResource {
 
     private final List<String> animalNames;
     private Random random;
-    @Autowired
-    private Tracer tracer;
 
 
     public AnimalNameResource() throws IOException {
         InputStream inputStream = new ClassPathResource("/animals.txt").getInputStream();
-        try(BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))){
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             animalNames = reader.lines().collect(Collectors.toList());
         }
         random = new Random();
@@ -70,10 +44,7 @@ class AnimalNameResource {
 
     @GetMapping(path = "/random")
     public String name(@RequestHeader HttpHeaders headers) {
-        SpanContext parentContext = tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapExtractAdapter(headers.toSingleValueMap()));
-        Span span = tracer.buildSpan("find-random-animal-name").asChildOf(parentContext).start();
         String name = animalNames.get(random.nextInt(animalNames.size()));
-        span.finish();
         return name;
     }
 }

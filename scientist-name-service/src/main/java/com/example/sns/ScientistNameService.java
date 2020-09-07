@@ -1,16 +1,7 @@
-package com.shekhargulati.sns;
+package com.example.sns;
 
-import io.jaegertracing.Configuration;
-import io.jaegertracing.internal.samplers.ConstSampler;
-import io.opentracing.Span;
-import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
-import io.opentracing.propagation.Format;
-import io.opentracing.propagation.TextMapExtractAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,21 +24,6 @@ public class ScientistNameService {
         SpringApplication.run(ScientistNameService.class, args);
     }
 
-    @Bean
-    public Tracer tracer() {
-        Configuration.SamplerConfiguration samplerConfig = Configuration.SamplerConfiguration.fromEnv()
-                .withType(ConstSampler.TYPE)
-                .withParam(1);
-
-        Configuration.ReporterConfiguration reporterConfig = Configuration.ReporterConfiguration.fromEnv()
-                .withLogSpans(true);
-
-        Configuration config = new Configuration("scientist-svc")
-                .withSampler(samplerConfig)
-                .withReporter(reporterConfig);
-
-        return config.getTracer();
-    }
 }
 
 
@@ -57,8 +33,6 @@ class ScientistNameResource {
 
     private final List<String> scientistsNames;
     private Random random;
-    @Autowired
-    private Tracer tracer;
 
     public ScientistNameResource() throws IOException {
         InputStream inputStream = new ClassPathResource("/scientists.txt").getInputStream();
@@ -70,10 +44,7 @@ class ScientistNameResource {
 
     @GetMapping(path = "/random")
     public String name(@RequestHeader HttpHeaders headers) {
-        SpanContext parentContext = tracer.extract(Format.Builtin.HTTP_HEADERS, new TextMapExtractAdapter(headers.toSingleValueMap()));
-        Span span = tracer.buildSpan("find-random-scientist-name").asChildOf(parentContext).start();
         String name = scientistsNames.get(random.nextInt(scientistsNames.size()));
-        span.finish();
         return name;
     }
 }
