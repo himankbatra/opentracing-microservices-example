@@ -1,0 +1,26 @@
+version: "3.4"
+services:
+  animal-name-service:
+    image: com.example/animal-name-service:0.1.0
+    restart: on-failure
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=animal-name-service
+  scientist-name-service:
+    image: com.example/scientist-name-service:0.1.0
+    restart: on-failure
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=scientist-name-service
+  name-generator-service:
+    image: com.example/name-generator-service:0.1.0
+    restart: on-failure
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_APPLICATION_NAME=name-generator-service
+    ports:
+      - "8080:8080"
+  jaeger:
+    image: jaegertracing/all-in-one:1.17
+    ports:
+      - 9090:16686
