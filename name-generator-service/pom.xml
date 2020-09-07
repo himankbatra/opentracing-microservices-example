@@ -38,26 +38,8 @@
 
         <dependency>
             <groupId>io.opentracing.contrib</groupId>
-            <artifactId>opentracing-spring-jaeger-web-starter</artifactId>
+            <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
             <version>3.1.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.openfeign.opentracing</groupId>
-            <artifactId>feign-opentracing</artifactId>
-            <version>0.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-okhttp</artifactId>
-            <version>11.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-httpclient</artifactId>
-            <version>11.0</version>
         </dependency>
 
         <dependency>
