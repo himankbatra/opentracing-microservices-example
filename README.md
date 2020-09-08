@@ -345,5 +345,5 @@ This is shown in below image.
 I have added Dockerfile,docker-compose and docker-setup.sh for making it easier to run this application.
 You can find the code at my github repository [link](https://github.com/himankbatra/opentracing-microservices-example).
 
-This is inspired by Shekhar Gulati's [Blog]  (https://shekhargulati.com/2019/04/08/a-minimalistic-guide-to-distributed-tracing-with-opentracing-and-jaeger/).
+This is inspired by Shekhar Gulati's [Blog](https://shekhargulati.com/2019/04/08/a-minimalistic-guide-to-distributed-tracing-with-opentracing-and-jaeger/).
 
